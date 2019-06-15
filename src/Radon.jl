@@ -1,15 +1,14 @@
 module Radon
-export radon!
-# package code goes here
+export radon, radon!, backproject, backproject!
 
-function radon{T<:AbstractFloat}(im::AbstractArray{T, 2})
+function radon(im::AbstractMatrix{T}) where {T<:AbstractFloat}
     Nx, Ny = size(im)
     radonim = similar(im, min(Nx, Ny), max(Nx, Ny))
     radon!(radonim, im)
     radonim
 end
 
-function radon!{T<:AbstractFloat}(radonim::AbstractArray{T, 2}, im::AbstractArray{T, 2})
+function radon!(radonim::AbstractMatrix{T}, im::AbstractMatrix{T}) where {T<:AbstractFloat}
     Nφ, Ns = size(radonim)
     Nx, Ny = size(im)
     Ldiag = hypot(Nx, Ny)
@@ -38,14 +37,14 @@ function radon!{T<:AbstractFloat}(radonim::AbstractArray{T, 2}, im::AbstractArra
     radonim
 end
 
-function backproject{T<:AbstractFloat}(radonim::AbstractArray{T, 2})
+function backproject(radonim::AbstractMatrix{T}) where {T<:AbstractFloat}
     Nφ, Ns = size(radonim)
     im = similar(radonim, Ns, Ns)
     backproject!(im, radonim)
     im
 end
 
-function backproject!{T<:AbstractFloat}(im::AbstractArray{T, 2}, radonim::AbstractArray{T, 2})
+function backproject!(im::AbstractMatrix{T}, radonim::AbstractMatrix{T}) where {T<:AbstractFloat}
     Nφ, Ns = size(radonim)
     Nx, Ny = size(im)
     Ldiag = hypot(Nx, Ny)
@@ -75,4 +74,4 @@ function backproject!{T<:AbstractFloat}(im::AbstractArray{T, 2}, radonim::Abstra
     im
 end
 
-end # module
+end
